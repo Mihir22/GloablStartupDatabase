@@ -18,3 +18,4 @@ The database will focus on:
 1) Clone the repository
 2) `npm install`
 3) `npm start`
+# GloablStartupDatabase
