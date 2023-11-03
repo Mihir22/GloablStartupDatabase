@@ -17,7 +17,7 @@
       <nav></nav>
 
       <main class="row">
-        <h1>Wildfire application</h1>
+        <h1>Global Startup Database System</h1>
         <div class="col-8">
           <div>
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Expedita
@@ -26,92 +26,262 @@
             inventore, sunt?
           </div>
 
-          <h2>Fires</h2>
-          <ul>
-            <% fires.forEach(function (f) { %>
+          <div class="container col-12">
+            <div class="row">
+                <div class="col-4">
+                    <h2>Startups</h2>
+                    <ul>
+                        <% startup.forEach(function (f) { %>
+                            <li>
+                                <a href="/startup/<%= f.startupID %>"><%= f.name %> 👉 <%= f.category %></a>
+                                <form action="/startup/delete" method="POST">
+                                    <input type="hidden" name="startupID" value="<%= f.startupID %>">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </li>
+                        <% }) %>
+                    </ul>
+                </div>
+    
+                <div class="col-4">
+                    <!-- You can repeat the same structure here for another column of Startups or other data -->
+                    <h2>Institutional Investor</h2>
+                    <ul>
+                        <% instInvestor.forEach(function (f) { %>
+                            <li>
+                                <a href="/investor/inst<%= f.investorID %>"><%= f.name %> 👉 <%= f.country %></a>
+                                <form action="/investor/delete" method="POST">
+                                    <input type="hidden" name="investorID" value="<%= f.investorID %>">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </li>
+                        <% }) %>
+                    </ul>
+                </div>
+                
 
-            <li><a href="/fires/<%= f.fireID %>"><%= f.startDate %> 👉 <%= f.location %></a>
-              <form action="/fires/delete" method="POST">
-                <input type="hidden" name="fireID" value="<%= f.fireID %>">
-                <button type="submit" class="btn btn-danger">Delete</button>
-              </form>
-            </li>
+                <div class="col-4">
+                  <!-- You can repeat the same structure here for another column of Startups or other data -->
+                  <h2>Individual Investor</h2>
+                  <ul>
+                      <% indiInvestor.forEach(function (f) { %>
+                          <li>
+                              <a href="/investor/indi<%= f.investorID %>"><%= f.name %> 👉 <%= f.country %></a>
+                              <form action="/investor/delete" method="POST">
+                                  <input type="hidden" name="investorID" value="<%= f.investorID %>">
+                                  <button type="submit" class="btn btn-danger">Delete</button>
+                              </form>
+                          </li>
+                      <% }) %>
+                  </ul>
+              </div>
+            </div>
 
-            <% })%>
-          </ul>
+          
         </div>
         <!-- /.col-8 -->
-
+        
+        <div class = "row">
         <div class="col-4">
-          <h2>Create Fire</h2>
+          <h2>Create Startup</h2>
 
-          <form action="/fires/create" method="POST">
+          <form action="/startup/create" method="POST">
             <div>
               <label class="form-label"
-                >Location:
+                >Name:
                 <input
                   required="true"
-                  name="location"
+                  name="name"
                   type="text"
                   class="form-control"
               /></label>
             </div>
             <div>
               <label class="form-label"
-                >Start Date:
+                >category:
                 <input
                   required="true"
-                  name="startDate"
+                  name="category"
                   type="text"
                   class="form-control"
-                  value="10/26/2021"
+                  value="FinTech"
               /></label>
             </div>
             <div>
               <label class="form-label"
-                >End Date:
+                >Funding:
                 <input
                   required="true"
-                  name="endDate"
-                  type="text"
-                  class="form-control"
-                  value="10/28/2021"
-              /></label>
-            </div>
-            <div>
-              <label class="form-label"
-                >Size:
-                <input
-                  required="true"
-                  value="10"
-                  name="size"
+                  name="fundingTotal"
                   type="number"
                   class="form-control"
+                  value=10000000
+              /></label>
+            </div>
+            <div>
+              <label class="form-label"
+                >Status:
+                <input
+                  required="true"
+                  value="active"
+                  name="status"
+                  type="text"
+                  class="active"
               /></label>
             </div>
 
-            <div>
-              <label class="form-label"
-                >OwnerID:
-                <input
-                  required="true"
-                  value="10"
-                  name="size"
-                  type="number"
-                  class="form-control"
-              /></label>
-            </div>
 
             <button type="submit" class="btn btn-primary">Create</button>
           </form>
         </div>
+
         <!-- /.col-4 -->
+
+        <div class="col-4">
+          <h2>Create Institutional Investor</h2>
+
+          <form action="/investor/inst/create" method="POST">
+            
+            <div class="me-2">
+              <label class="form-label"
+                >Name:
+                <input
+                  required="true"
+                  name="name"
+                  type="text"
+                  class="form-control"
+              /></label>
+            </div>
+            <div>
+              <label class="form-label"
+                >Contact Info:
+                <input
+                  required="true"
+                  name="contactInfo"
+                  type="text"
+                  class="form-control"
+              /></label>
+            </div>
+            <div class="me-2">
+              <label class="form-label"
+                >Country:
+                <input
+                  required="true"
+                  name="country"
+                  type="text"
+                  class="form-control"
+              /></label>
+            </div>
+            <div>
+              <label class="form-label">
+                  Founding Date:
+                  <input required="true" name="foundingDate" type="date" class="form-control" />
+              </label>
+          </div>
+            <div>
+              <label class="form-label"
+                >Number of Members:
+                <input
+                  required="true"
+                  value="active"
+                  name="numberOfMembers"
+                  type="number"
+                  class="active"
+                  value = 540
+              /></label>
+            </div>
+
+            <div>
+              <label class="form-label"
+                >Assets Under Management:
+                <input
+                  required="true"
+                  value="active"
+                  name="assetUnderManagement"
+                  type="number"
+                  class="active"
+                  value = 1000000
+              /></label>
+            </div>
+
+          
+
+
+            <button type="submit" class="btn btn-primary">Create</button>
+          </form>
+        </div>
+
+
+        <div class="col-4">
+          <h2>Create Individual Investor</h2>
+
+          <form action="/investor/indi/create" method="POST">
+            
+            <div class="me-2">
+              <label class="form-label"
+                >Name:
+                <input
+                  required="true"
+                  name="name"
+                  type="text"
+                  class="form-control"
+              /></label>
+            </div>
+            <div>
+              <label class="form-label"
+                >Contact Info:
+                <input
+                  required="true"
+                  name="contactInfo"
+                  type="text"
+                  class="form-control"
+              /></label>
+            </div>
+            <div class="me-2">
+              <label class="form-label"
+                >Country:
+                <input
+                  required="true"
+                  name="country"
+                  type="text"
+                  class="form-control"
+              /></label>
+            </div>
+            <div>
+              <label class="form-label">
+                  Birth Date:
+                  <input required="true" name="birthDate" type="date" class="form-control" />
+              </label>
+          </div>
+            
+
+            <div>
+              <label class="form-label"
+                >Net Worth:
+                <input
+                  required="true"
+                  value="active"
+                  name="netWorth"
+                  type="number"
+                  class="active"
+                  value=10000000
+              /></label>
+            </div>
+
+          
+
+
+            <button type="submit" class="btn btn-primary">Create</button>
+          </form>
+        </div>
+
+      </div>
       </main>
 
       <footer>
         <div class="row">
           <div class="col-4">About</div>
-          <div class="col-4">Made By John with ⏰</div>
+          <div class="col-4">Made By Mihir with ⏰</div>
           <div class="col-4">Copyleft ©</div>
         </div>
       </footer>

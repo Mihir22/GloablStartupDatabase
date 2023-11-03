@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="/Users/mihirmesia/Desktop/database/nodeExpressSqliteEJS_2/db/Startup.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="1496"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,9:mainFoundedBy"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="FoundedBy" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="60"/><column index="2" value="57"/><column index="3" value="62"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1">-- 1. Venue Table
+CREATE TABLE &quot;Venue&quot; (
+	&quot;venueID&quot;	INTEGER,
+	&quot;venueName&quot;	TEXT NOT NULL,
+	&quot;location&quot;	DATE NOT NULL,
+	PRIMARY KEY(&quot;venueID&quot; AUTOINCREMENT)
+);
+-- 
+-- 2. FundingRound Table
+CREATE TABLE &quot;FundingRound&quot; (
+	&quot;roundID&quot;	INTEGER,
+	&quot;fundingRoundType&quot;	TEXT NOT NULL,
+	&quot;fundingRoundDate&quot;	DATE NOT NULL,
+	&quot;typeOfEvent&quot;	TEXT NOT NULL,
+	&quot;venueID&quot;	INT,
+	PRIMARY KEY(&quot;roundID&quot; AUTOINCREMENT),
+	FOREIGN KEY(&quot;venueID&quot;) REFERENCES &quot;Venue&quot;(&quot;venueID&quot;)
+);
+-- 
+-- 3. Startup Table
+CREATE TABLE &quot;Startup&quot; (
+	&quot;startupID&quot;	INTEGER,
+	&quot;name&quot;	TEXT NOT NULL,
+	&quot;category&quot;	TEXT,
+	&quot;fundingTotal&quot;	DECIMAL(15, 2),
+	&quot;status&quot;	TEXT NOT NULL,
+	PRIMARY KEY(&quot;startupID&quot; AUTOINCREMENT)
+);
+-- 
+-- 4. Participates Table
+CREATE TABLE &quot;Participates&quot; (
+	&quot;participationID&quot;	INTEGER,
+	&quot;venueID&quot;	INT,
+	&quot;startupID&quot;	INT,
+	PRIMARY KEY(&quot;participationID&quot; AUTOINCREMENT),
+	FOREIGN KEY(&quot;venueID&quot;) REFERENCES &quot;Venue&quot;(&quot;venueID&quot;),
+	FOREIGN KEY(&quot;startupID&quot;) REFERENCES &quot;Startup&quot;(&quot;startupID&quot;)
+);
+-- 
+-- 5. Investor Table
+CREATE TABLE &quot;Investor&quot; (
+	&quot;investorID&quot;	INTEGER,
+	&quot;name&quot;	TEXT NOT NULL,
+	&quot;contactInfo&quot;	TEXT,
+	&quot;country&quot;	TEXT NOT NULL,
+	PRIMARY KEY(&quot;investorID&quot; AUTOINCREMENT)
+);
+
+-- 6. InvestsIn Table
+CREATE TABLE &quot;InvestsIn&quot; (
+	&quot;investorID&quot;	INT,
+	&quot;startupID&quot;	INT,
+	&quot;investeID&quot;	INTEGER NOT NULL,
+	PRIMARY KEY(&quot;investeID&quot; AUTOINCREMENT),
+	FOREIGN KEY(&quot;startupID&quot;) REFERENCES &quot;Startup&quot;(&quot;startupID&quot;),
+	FOREIGN KEY(&quot;investorID&quot;) REFERENCES &quot;Investor&quot;(&quot;investorID&quot;)
+);
+
+-- 7. Founder Table
+CREATE TABLE &quot;Founder&quot; (
+	&quot;founderID&quot;	INTEGER,
+	&quot;founderName&quot;	TEXT NOT NULL,
+	&quot;birthDate&quot;	DATE NOT NULL,
+	&quot;nationality&quot;	TEXT NOT NULL,
+	PRIMARY KEY(&quot;founderID&quot; AUTOINCREMENT)
+);
+
+-- 8. FoundedBy Table
+CREATE TABLE &quot;FoundedBy&quot; (
+	&quot;founderID&quot;	INT,
+	&quot;startupID&quot;	INT,
+	&quot;foundedID&quot;	INTEGER,
+	PRIMARY KEY(&quot;foundedID&quot; AUTOINCREMENT),
+	FOREIGN KEY(&quot;startupID&quot;) REFERENCES &quot;Startup&quot;(&quot;startupID&quot;),
+	FOREIGN KEY(&quot;founderID&quot;) REFERENCES &quot;Founder&quot;(&quot;founderID&quot;)
+);
+
+-- 9. InstitutionalInvestor Table
+CREATE TABLE &quot;InstitutionalInvestor&quot; (
+	&quot;investorID&quot;	INTEGER,
+	&quot;foundingDate&quot;	DATE NOT NULL,
+	&quot;numberOfMembers&quot;	INT NOT NULL,
+	&quot;assetUnderManagement&quot;	DECIMAL(15, 2) NOT NULL,
+	PRIMARY KEY(&quot;investorID&quot;),
+	FOREIGN KEY(&quot;investorID&quot;) REFERENCES &quot;Investor&quot;(&quot;investorID&quot;) ON DELETE CASCADE
+)
+
+-- 10. IndividualInvestor Table
+CREATE TABLE &quot;IndividualInvestor&quot; (
+	&quot;investorID&quot;	INTEGER,
+	&quot;birthdate&quot;	DATE NOT NULL,
+	&quot;netWorth&quot;	DECIMAL(15, 2) NOT NULL,
+	FOREIGN KEY(&quot;investorID&quot;) REFERENCES &quot;Investor&quot;(&quot;investorID&quot;) ON DELETE CASCADE,
+	PRIMARY KEY(&quot;investorID&quot;)
+);
+
+
+
+-- Venue
+INSERT INTO Venue (venueName, location) VALUES 
+('Innovation Hub', 'Los Angeles'),
+('Tech Spotlight', 'San Diego'),
+('Venture Venue', 'San Francisco'),
+('Entrepreneur Island', 'Miami'),
+('Pioneer Palace', 'New York'),
+('Creative Castle', 'Austin'),
+('Inventor’s Inn', 'San Francisco'),
+ Pioneer Pavilion', 'Paris'),
+('Strategist Studio', 'London'),
+('Visionary Vault', 'Sydney'),
+('Wizard’s Workshop', 'Austin'),
+ Genius Gym', 'Berlin'),
+('Maven Manor', 'Miami'),
+('Prodigy Palace', 'Tokyo'),
+('Savant Suite', 'Tokyo');
+
+
+-- FundingRound
+INSERT INTO FundingRound (fundingRoundType, fundingRoundDate, typeOfEvent, venueID) VALUES 
+('Seed', '2023-02-01', 'Pitching', 1),
+('Series A', '2023-03-01', 'Showcase', 2),
+('Series B', '2023-04-01', 'Discussion', 3),
+('Series C', '2023-05-01', 'Workshop', 4),
+('Seed', '2023-06-01', 'Seminar', 5),
+('Series A', '2023-07-01', 'Networking', 6),
+('Series B', '2023-08-01', 'Panel', 7),
+('Seed', '2023-09-01', 'Demo Day', 8),
+('Series A', '2023-10-01', 'Webinar', 9),
+('Series C', '2023-11-01', 'Roundtable', 10),
+('Seed', '2023-12-01', 'Hackathon', 11),
+('Series B', '2024-01-01', 'Symposium', 12),
+('Series A', '2024-02-01', 'Conference', 13);
+
+-- Startup
+INSERT INTO Startup (name, category, fundingTotal, status) VALUES 
+('TechX', 'Software', 1000000, 'Active'),
+('HealthCare Plus', 'MedTech', 2000000, 'Active'),
+('EduRevolve', 'EdTech', 1500000, 'Inactive'),
+('EcoInnovate', 'CleanTech', 3000000, 'Active'),
+('SafeWeb', 'Cybersecurity', 1500000, 'Active'),
+('SmartEdu', 'EdTech', 2500000, 'Active'),
+('FitLife', 'HealthTech', 2000000, 'Inactive'),
+('QuickShop', 'E-commerce', 3500000, 'Active'),
+('HomeEase', 'RealEstate', 4000000, 'Active'),
+('AutoMoto', 'AutoTech', 1000000, 'Active'),
+('SolarVibe', 'Energy', 5000000, 'Active'),
+('FoodFast', 'FoodTech', 1500000, 'Inactive'),
+('FinanceFlex', 'FinTech', 2000000, 'Active');
+
+
+-- Participates
+INSERT INTO Participates (venueID, startupID) VALUES 
+(1, 1), (2, 2), (3, 3), (4, 4), (5, 5),
+(6, 6), (7, 7), (8, 8), (9, 9), (10, 10);
+
+-- Investor
+INSERT INTO Investor (name, contactInfo, country) VALUES 
+('John Doe', 'john@email.com', 'USA'),
+('Jane Smith', 'jane@email.com', 'Canada'),
+('Robert Brown', 'robert@email.com', 'UK'),
+('Samuel Thompson', 'samuel@email.com', 'USA'),
+('Patricia Johnson', 'patricia@email.com', 'Canada'),
+('Linda Williams', 'linda@email.com', 'UK'),
+('James Brown', 'james@email.com', 'Australia'),
+('Barbara Clark', 'barbara@email.com', 'Singapore'),
+('Robert Lewis', 'robert@email.com', 'USA'),
+('Elizabeth Walker', 'elizabeth@email.com', 'UK'),
+('Michael Hall', 'michael@email.com', 'Australia'),
+('Susan Lee', 'susan@email.com', 'Singapore'),
+('William Scott', 'william@email.com', 'USA');
+
+-- InvestsIn
+INSERT INTO InvestsIn (investorID, startupID) VALUES 
+(1, 1), (2, 2), (3, 3), (4, 4), (5, 5),
+(6, 6), (7, 7), (8, 8), (9, 9), (10, 10);
+
+
+-- Founder
+INSERT INTO Founder (founderName, birthDate, nationality) VALUES 
+('Alice Johnson', '1990-05-01', 'USA'),
+('Bob Williams', '1985-07-10', 'UK'),
+('Charlie Martinez', '1988-08-15', 'Canada'),
+('Emily Turner', '1985-03-21', 'USA'),
+('John Wilson', '1980-08-15', 'Canada'),
+('Daniel Johnson', '1982-11-03', 'UK'),
+('Nancy Davis', '1975-02-10', 'Australia'),
+('Paul Martinez', '1988-05-19', 'Singapore'),
+('Jennifer Taylor', '1990-09-30', 'USA'),
+('Christopher Rodriguez', '1978-12-05', 'UK'),
+('Linda Harris', '1983-01-14', 'Australia'),
+('Michael White', '1986-04-22', 'Singapore'),
+('Elizabeth Clark', '1979-07-07', 'USA');
+
+-- FoundedBy
+INSERT INTO FoundedBy (founderID, startupID) VALUES 
+(1, 1), (2, 2), (3, 3), (4, 4), (5, 5),
+(6, 6), (7, 7), (8, 8), (9, 9), (10, 10);
+
+
+-- InstitutionalInvestor
+INSERT INTO InstitutionalInvestor (investorID, foundingDate, numberOfMembers, assetUnderManagement) VALUES 
+(1, '1990-01-01', 5000, 5000000000),
+(2, '2000-01-01', 100, 1000000000),
+(5, '1980-11-05', 5000, 5000000000),
+(8, '2005-28-11', 100, 1800000000),
+(7, '1982-05-03', 5000, 3450000000),
+(10, '2000-14-10', 100, 8980000000);
+
+
+-- IndividualInvestor
+INSERT INTO IndividualInvestor (investorID, birthdate, netWorth) VALUES 
+(3, '1970-01-01', 2000000),
+(4, '1980-01-01', 3000000),
+(6, '1991-11-04', 2055000),
+(9, '1973-05-06', 1400000);
+
+
+-- This query retrieves information from the Startup, InvestsIn, and Investor tables.
+
+SELECT Startup.name AS Startup_Name, Investor.name AS Investor_Name, Investor.country AS Investor_Country
+FROM Startup
+JOIN InvestsIn ON Startup.startupID = InvestsIn.startupID
+JOIN Investor ON InvestsIn.investorID = Investor.investorID;
+
+-- This query finds all venues where a funding round of type 'Seed' took place.
+
+SELECT venueName 
+FROM Venue
+WHERE venueID IN (SELECT venueID FROM FundingRound WHERE fundingRoundType = 'Seed');
+
+-- This query finds the number of startups in each category where there are more than one.
+SELECT category, COUNT(*) AS NumberOfStartups
+FROM Startup
+GROUP BY category
+HAVING COUNT(*) &gt; 1;
+
+
+-- This query finds startups that have a funding total of more than 1 million and are either active or in the 'Software' category.
+SELECT * 
+FROM Startup
+WHERE fundingTotal &gt; 1000000 AND (status = 'Active' OR category = 'Software');
+
+
+-- This query retrieves founders and their respective startup
+SELECT Founder.founderName, Startup.name AS Startup_Name
+FROM Founder
+JOIN FoundedBy ON Founder.founderID = FoundedBy.founderID
+JOIN Startup ON FoundedBy.startupID = Startup.startupID;
+
+-- Determine Startup categories preferred by Investors from a specific Country
+
+SELECT s.category, COUNT(*) as NumberOfInvestments
+FROM Investor i
+JOIN InvestsIn ii ON i.investorID = ii.investorID
+JOIN Startup s ON ii.startupID = s.startupID
+WHERE i.country = 'Canada'  -- Replace 'USA' with the desired country
+GROUP BY s.category
+ORDER BY NumberOfInvestments DESC;
+
+
+-- Determine the type of startups receiving the most number amount of funding
+
+SELECT category, SUM(fundingTotal) as TotalFunding
+FROM Startup
+GROUP BY category
+ORDER BY TotalFunding DESC
+LIMIT 5;
+
+-- Analyze Investor preferences by Country
+
+SELECT 
+    i.country,
+    s.category,
+    COUNT(*) AS NumberOfInvestments
+FROM 
+    Investor i
+JOIN 
+    InvestsIn ii ON i.investorID = ii.investorID
+JOIN 
+    Startup s ON ii.startupID = s.startupID
+GROUP BY 
+    i.country, s.category
+ORDER BY 
+    i.country, NumberOfInvestments DESC;
+
+
+-- Analyze the funding received by a certain type of startups
+
+SELECT 
+    s.name AS Startup_Name,
+    s.category AS Startup_Category,
+    s.fundingTotal AS Total_Funding,
+    COUNT(ii.investorID) AS NumberOfInvestors
+FROM 
+    Startup s
+LEFT JOIN 
+    InvestsIn ii ON s.startupID = ii.startupID
+WHERE 
+    s.category = 'Software' -- You can change 'Software' to any category you want to analyze
+GROUP BY 
+    s.startupID, s.name, s.category, s.fundingTotal
+ORDER BY 
+    s.fundingTotal DESC;
+
+	
+-- This query retrieves the venues that have hosted more than a certain number of events (e.g., 3), along with the count of events.
+SELECT v.venueName, COUNT(fr.roundID) AS number_of_events
+FROM Venue v
+JOIN FundingRound fr ON v.venueID = fr.venueID
+GROUP BY v.venueName
+HAVING COUNT(fr.roundID) &gt; 3;
+
+
+
+
+
+
+</sql><current_tab id="0"/></tab_sql></sqlb_project>
