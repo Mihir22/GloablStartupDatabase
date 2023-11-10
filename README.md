@@ -12,6 +12,15 @@ The database will focus on:
 4. Countries as primary geographical entities to associate startups and investors.
 5. Founders, detailing their background and associations with startups
 
+### Node + Express App:
+This app will let you do the following
+
+1. View all the startups.
+2. Create, edit, delete startups.
+3. View all the investors.
+4. Create, edit, delete both type of Investors (Institutional, Individual) (Foreign Key).
+5. View all the investments by individual investor.
+6. Invest in different startups. (Foreing Key).
 
 ## Installation
 
