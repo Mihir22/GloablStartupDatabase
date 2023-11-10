@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Invests In - Investor <%= investorID %></title>
+  <%- include('./partials/css.ejs') %>
+</head>
+<body>
+  <div class="container">
+    <nav></nav>
+    <main>
+      <h1>Startups Invested In</h1>
+      <ul>
+        <% investorStartups.forEach(function(startup) { %>
+          <li><%= startup.name %> - Invested</li>
+        <% }); %>
+      </ul>
+
+      <h1>Invest in a New Startup</h1>
+      <form action="/investor/add-investment/<%= investorID %>" method="POST">
+        <% allStartups.forEach(function(startup) { %>
+          <label>
+            <input
+              type="radio"
+              name="startupID"
+              value="<%= startup.startupID %>"
+            />
+            <%= startup.name %>
+          </label><br>
+        <% }); %>
+        <button type="submit">Invest</button>
+      </form>
+    </main>
+  </div>
+</body>
+</html>

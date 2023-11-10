@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Investor Details Page</title>
+    <%- include('./partials/css.ejs') %>
+  </head>
+  <body>
+    <div class="container">
+      <nav></nav>
+      <main class="row">
+        <%- include("./partials/navBar.ejs") %>
+      <h1>Edit Investor Details</h1>
+
+      <%- include("./partials/errMsg.ejs") %>
+        <div class="col-8">
+          <form action="/investor/inst/update" method="POST">
+            <div>
+              <input
+                  name="investorID"
+                  type="hidden"
+                  class="form-control"
+                  value="<%= investor.investorID %>"
+              />
+            </div>
+            <div>
+              <label class="form-label"
+                >Name:
+                <input
+                  required="true"
+                  name="name"
+                  type="text"
+                  class="form-control"
+                  value="<%= investor.name %>"
+              /></label>
+            </div>
+            <div>
+              <label class="form-label"
+                >Contact Info:
+                <input
+                  required="true"
+                  name="contactInfo"
+                  type="text"
+                  class="form-control"
+                  value="<%= investor.contactInfo %>"
+              /></label>
+            </div>
+            <div>
+              <label class="form-label"
+                >Country:
+                <input
+                  required="true"
+                  name="country"
+                  type="text"
+                  class="form-control"
+                  value="<%= investor.country %>"
+              /></label>
+            </div>
+            <div>
+              <label class="form-label"
+                >Founding Date:
+                <input
+                  required="true"
+                  name="foundingDate"
+                  type="date"
+                  class="form-control"
+                  value="<%= investor.foundingDate %>"
+              /></label>
+            </div>
+
+            <div>
+              <label class="form-label"
+                >Number of Members:
+                <input
+                  required="true"
+                  name="numberOfMembers"
+                  type="number"
+                  class="form-control"
+                  value="<%= investor.numberOfMembers %>"
+              /></label>
+            </div>
+
+            <div>
+              <label class="form-label"
+                >Assests Under Management:
+                <input
+                  required="true"
+                  name="assetUnderManagement"
+                  type="number"
+                  class="form-control"
+                  value="<%= investor.assetUnderManagement %>"
+              /></label>
+            </div>
+
+
+            <button type="submit" class="btn btn-primary">Update</button>
+          </form>
+        </div>
+        <!-- /.col-8 -->
+
+      </main>
+
+      <%- include("./partials/footer.ejs") %>
+    </div>
+  </body>
+</html>

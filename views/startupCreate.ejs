@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Create Startup</title>
+    <%- include('./partials/css.ejs') %>
+  </head>
+  <body>
+    <div class="container">
+      <%- include("./partials/navBar.ejs") %>
+      <h1>Create Startup</h1>
+
+      <%- include("./partials/errMsg.ejs") %>
+
+
+
+      <form action="/startup/create" method="POST">
+        <div>
+          <label class="form-label"
+            >Name:
+            <input
+              required="true"
+              name="name"
+              type="text"
+              class="form-control"
+          /></label>
+        </div>
+        <div>
+          <label class="form-label"
+            >Category:
+            <input
+              required="true"
+              name="category"
+              type="text"
+              class="form-control"
+              value="FinTech"
+          /></label>
+        </div>
+        <div>
+          <label class="form-label"
+            >Funding:
+            <input
+              required="true"
+              name="fundingTotal"
+              type="number"
+              class="form-control"
+              value=10000000
+          /></label>
+        </div>
+        <div>
+          <label class="form-label"
+            >Status:
+            <input
+              required="true"
+              value="active"
+              name="status"
+              type="text"
+              class="active"
+          /></label>
+        </div>
+
+
+        <button type="submit" class="btn btn-primary">Create</button>
+      </form>
+
+      <%- include("./partials/footer.ejs") %>
+    </div>
+    <!-- /.container -->
+  </body>
+</html>

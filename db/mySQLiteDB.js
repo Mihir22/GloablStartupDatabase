@@ -61,7 +61,7 @@ async function createStartup(newFire) {
    await stmt.run();
    await stmt.finalize();
   } finally {
-    // db.close();
+    db.close();
   }
 
   
@@ -167,7 +167,8 @@ async function getStartupByID(fireID) {
   
 }
 
-async function deleteStartup(fireToDelete) {
+async function deleteStartup(startupID) {
+  console.log("reached here");
   const db = await connect();
 
   try {
@@ -177,7 +178,7 @@ async function deleteStartup(fireToDelete) {
   `);
 
   stmt.bind({
-    ":theIDToDelete": fireToDelete.startupID,
+    ":theIDToDelete": startupID,
   });
 
    await stmt.run();
@@ -192,13 +193,11 @@ async function updateStartup(startup) {
   const db = await connect();
 
   try {
-    console.log(startup);
     const stmt = await db.prepare(`UPDATE Startup
     SET name = :name, category = :category,
     fundingTotal = :fundingTotal, status = :status
     WHERE startupID = :id;
   `);
-  console.log("Startup value", startup);
   stmt.bind({
     ":id":startup.startupID,
     ":name": startup.name,
@@ -210,23 +209,22 @@ async function updateStartup(startup) {
    await stmt.run();
    await stmt.finalize();
   } finally {
-    // db.close();
+    db.close();
   }
 
 }
 
 async function deleteInvestor(investorToDelete) {
   const db = await connect();
-  // await db.run('PRAGMA foreign_keys = ON;'); // Enable foreign key constraints
+  await db.run('PRAGMA foreign_keys = ON;'); // Enable foreign key constraints
 
   try {
    
     const stmt = await db.prepare(`DELETE FROM Investor WHERE investorID = :theIDToDelete`);
     
-   console.log(investorToDelete.investorID);
 
   stmt.bind({
-    ":theIDToDelete": investorToDelete.investorID,
+    ":theIDToDelete": investorToDelete,
   });
 
    await stmt.run();
@@ -256,6 +254,148 @@ async function getInstInvestorByID(fireID) {
   
 }
 
+async function getIndInvestorByID(fireID) {
+  const db = await connect();
+
+  try {
+    const stmt = await db.prepare(`SELECT * FROM INVESTOR a INNER JOIN IndividualInvestor b ON a.investorID = b.investorID WHERE 
+    a.investorID = :investorID`);
+
+
+  stmt.bind({
+    ":investorID": fireID,
+  });
+
+  return await stmt.get();
+  } finally {
+    // db.close();
+  }
+  
+}
+
+async function updateInstInvestorByID(investor) {
+  const db = await connect();
+
+  console.log(investor);
+
+  await db.run('BEGIN TRANSACTION;'); 
+
+  try {
+    const stmt = await db.prepare(`UPDATE Investor
+    SET name = :name, contactInfo = :contactInfo,
+    country = :country WHERE investorID = :id;
+  `);
+
+  const stmt1 = await db.prepare(`UPDATE InstitutionalInvestor
+    SET foundingDate = :foundingDate, numberOfMembers = :numberOfMembers,
+    assetUnderManagement = :assetUnderManagement WHERE investorID = :id;
+  `);
+  stmt.bind({
+    ":id":investor.investorID,
+    ":name": investor.name,
+    ":contactInfo": investor.contactInfo,
+    ":country": investor.country,
+  });
+
+  stmt1.bind({
+    ":id":investor.investorID,
+    ":foundingDate": investor.foundingDate,
+    ":numberOfMembers": investor.numberOfMembers,
+    ":assetUnderManagement": investor.assetUnderManagement,
+  });
+
+   await stmt.run();
+   await stmt.finalize();
+   await stmt1.run();
+   await stmt1.finalize();
+
+   await db.run('COMMIT;');
+  } finally {
+    // db.close();
+  }
+
+  
+}
+
+async function updateIndInvestorByID(investor) {
+  const db = await connect();
+
+  console.log(investor);
+  
+  try {
+    const stmt = await db.prepare(`UPDATE Investor
+    SET name = :name, contactInfo = :contactInfo,
+    country = :country WHERE investorID = :id;
+  `);
+
+  const stmt1 = await db.prepare(`UPDATE IndividualInvestor
+    SET birthdate = :birthdate, netWorth = :netWorth
+     WHERE investorID = :id;
+  `);
+  stmt.bind({
+    ":id":investor.investorID,
+    ":name": investor.name,
+    ":contactInfo": investor.contactInfo,
+    ":country": investor.country,
+  });
+
+  stmt1.bind({
+    ":id":investor.investorID,
+    ":birthdate": investor.birthdate,
+    ":netWorth": investor.netWorth,
+  });
+
+   await stmt.run();
+   await stmt.finalize();
+   await stmt1.run();
+   await stmt1.finalize();
+
+   
+  } finally {
+    
+  }
+
+  
+}
+
+async function getInvestorStartups(investorID) {
+  const db = await connect();
+
+  try {
+    const stmt = await db.prepare(`
+      SELECT s.*
+      FROM InvestsIn ii
+      JOIN Startup s ON ii.startupID = s.startupID
+      WHERE ii.investorID = :investorID;
+    `);
+
+    stmt.bind({ ":investorID": investorID });
+
+    return await stmt.all(); // Retrieve all rows that match the query
+  } finally {
+    // await db.close(); 
+  }
+}
+
+async function addInvestments(investorID, startupID) {
+  const db = await connect();
+
+  try {
+    const stmt = await db.prepare(`
+    INSERT INTO
+    InvestsIn(investorID, startupID)
+    VALUES (:investorID, :startupID)
+    `);
+
+    stmt.bind({ ":investorID": investorID, ":startupID": startupID });
+
+    await stmt.run();
+   await stmt.finalize(); // Retrieve all rows that match the query
+  } finally {
+    // await db.close(); 
+  }
+}
+
 
 module.exports.getStartup = getStartup;
 module.exports.createStartup = createStartup;
@@ -268,3 +408,8 @@ module.exports.getIndiInvestors = getIndiInvestors;
 module.exports.createInstInvestor = createInstInvestor;
 module.exports.createIndiInvestor = createIndiInvestor;
 module.exports.getInstInvestorByID = getInstInvestorByID;
+module.exports.updateInstInvestorByID = updateInstInvestorByID;
+module.exports.updateIndInvestorByID = updateIndInvestorByID;
+module.exports.getIndInvestorByID = getIndInvestorByID;
+module.exports.getInvestorStartups = getInvestorStartups;
+module.exports.addInvestments = addInvestments;
